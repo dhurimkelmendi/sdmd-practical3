@@ -34,6 +34,12 @@ public class Meal {
     @SerializedName("createdAt")
     private long createdAt;
 
+    @SerializedName("preview")
+    private String preview;
+
+    @SerializedName("upvotes")
+    private int upvotes;
+
     @SerializedName("mealType")
     private MealType mealType;
 
@@ -43,13 +49,15 @@ public class Meal {
     public Meal() {
     }
 
-    public Meal(String title, String recipe, int numberOfServings, int prepTimeHour, int prepTimeMinute, long mealTypeServerId) {
+    public Meal(String title, String recipe, int numberOfServings, int prepTimeHour, int prepTimeMinute, long mealTypeServerId, String preview, int upvotes) {
         this.title = title;
         this.recipe = recipe;
         this.numberOfServings = numberOfServings;
         this.prepTimeHour = prepTimeHour;
         this.prepTimeMinute = prepTimeMinute;
         this.createdAt = new Date().getTime();
+        this.preview = preview;
+        this.upvotes = upvotes;
 
         this.mealType = new MealType(mealTypeServerId);
     }
@@ -63,6 +71,8 @@ public class Meal {
         contentValues.put(FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR, prepTimeHour);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE, prepTimeMinute);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_CREATED_AT, createdAt);
+        contentValues.put(FoodNetworkContract.Meal.COLUMN_PREVIEW, preview);
+        contentValues.put(FoodNetworkContract.Meal.COLUMN_UPVOTES, upvotes);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, serverId);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID, mealType.getServerId());
 

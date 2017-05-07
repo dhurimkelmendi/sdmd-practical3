@@ -84,6 +84,27 @@
             android:textStyle="bold"
             tools:text="0:10"/>
 
+        <TextView
+            android:id="@+id/tv_upvotes_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_prep_time"
+            android:layout_marginTop="10dp"
+            android:text="@string/upvotes"/>
+
+        <TextView
+            android:id="@+id/tv_upvotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_upvotes_header"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/tv_upvotes_header"
+            android:layout_toRightOf="@id/tv_upvotes_header"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="1"/>
+
     </RelativeLayout>
 
 </ScrollView>

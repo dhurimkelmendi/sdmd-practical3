@@ -7,6 +7,7 @@
     <string name="recipe">Recipe</string>
     <string name="number_of_servings">Number of Servings</string>
     <string name="prep_time">Prep Time</string>
+    <string name="upvotes">Upvotes</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="msg_meal_uploaded">Meal uploaded to server successfully. Click to view.</string>

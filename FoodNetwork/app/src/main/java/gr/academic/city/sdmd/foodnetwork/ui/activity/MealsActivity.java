@@ -32,20 +32,23 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
             FoodNetworkContract.Meal._ID,
             FoodNetworkContract.Meal.COLUMN_TITLE,
             FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE
+            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE,
+            FoodNetworkContract.Meal.COLUMN_UPVOTES
     };
 
-    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_CREATED_AT + " DESC";
+    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_UPVOTES + " DESC";
 
     private static final int MEALS_LOADER = 10;
 
     private final static String[] FROM_COLUMNS = {
             FoodNetworkContract.Meal.COLUMN_TITLE,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,};
+            FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,
+            FoodNetworkContract.Meal.COLUMN_UPVOTES};
 
     private final static int[] TO_IDS = {
             R.id.tv_meal_title,
-            R.id.tv_meal_prep_time};
+            R.id.tv_meal_prep_time,
+            R.id.tv_meal_upvotes};
 
     public static Intent getStartIntent(Context context, long mealTypeServerId) {
         Intent intent = new Intent(context, MealsActivity.class);

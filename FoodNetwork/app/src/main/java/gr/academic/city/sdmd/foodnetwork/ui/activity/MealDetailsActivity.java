@@ -41,6 +41,7 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
     private TextView tvNumberOfServings;
     private TextView tvPrepTime;
     private TextView tvCreationDate;
+    private TextView tvUpvotes;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -57,6 +58,7 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         tvNumberOfServings = (TextView) findViewById(R.id.tv_number_of_servings);
         tvPrepTime = (TextView) findViewById(R.id.tv_prep_time);
         tvCreationDate = (TextView) findViewById(R.id.tv_meal_creation_date);
+        tvUpvotes = (TextView) findViewById(R.id.tv_upvotes);
 
         getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
     }
@@ -98,7 +100,10 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
             int prepTimeMinute = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE));
 
             tvPrepTime.setText(getString(R.string.prep_time_w_placeholder, prepTimeHour, prepTimeMinute));
-            tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
+            tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(
+                    FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
+
+            tvUpvotes.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES)));
         }
 
         if (cursor != null) {
