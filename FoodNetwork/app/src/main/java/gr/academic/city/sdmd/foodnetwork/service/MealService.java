@@ -41,7 +41,9 @@ public class MealService extends IntentService {
         context.startService(intent);
     }
 
-    public static void startCreateMeal(Context context, long mealTypeServerId, String title, String recipe, int numberOfServings, int prepTimeHour, int prepTimeMinute) {
+    public static void startCreateMeal(Context context, long mealTypeServerId, String title,
+                                       String recipe, int numberOfServings, int prepTimeHour,
+                                       int prepTimeMinute) {
         Intent intent = new Intent(context, MealService.class);
         intent.setAction(ACTION_CREATE_MEAL);
         intent.putExtra(EXTRA_MEAL_TYPE_SERVER_ID, mealTypeServerId);
@@ -50,6 +52,7 @@ public class MealService extends IntentService {
         intent.putExtra(EXTRA_NUMBER_OF_SERVINGS, numberOfServings);
         intent.putExtra(EXTRA_PREP_TIME_HOUR, prepTimeHour);
         intent.putExtra(EXTRA_PREP_TIME_MINUTE, prepTimeMinute);
+        intent.putExtra(EXTRA_UPVOTES, 0);
 
         context.startService(intent);
     }
