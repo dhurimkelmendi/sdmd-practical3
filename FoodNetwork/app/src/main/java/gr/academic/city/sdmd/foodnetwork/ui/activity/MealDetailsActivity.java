@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -44,6 +45,7 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
     private TextView tvPrepTime;
     private TextView tvCreationDate;
     private TextView tvUpvotes;
+    private long mealServerId = 0;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -64,7 +66,6 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         findViewById(R.id.btn_upvote_meal).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                long mealServerId = 0;
             Cursor cursor = getContentResolver().query(FoodNetworkContract.Meal.CONTENT_URI,
                     new String[0],
                     FoodNetworkContract.Meal._ID + " = " + mealId,
@@ -74,7 +75,14 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
             if (cursor.moveToFirst()) {
                 mealServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID));
             }
-                MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId);
+                MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, 1);
+                Snackbar.make(findViewById(R.id.coordinator_layout),
+                        R.string.msg_snackbar, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, -1);
+                    }
+                }).show();
             }
         });
         getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
