@@ -82,4 +82,7 @@ public class Meal {
     public long getServerId() {
         return serverId;
     }
+    public String getImagePreview() {
+        return preview;
+    }
 }
