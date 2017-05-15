@@ -4,34 +4,45 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import gr.academic.city.sdmd.foodnetwork.R;
-import gr.academic.city.sdmd.foodnetwork.async_tasks.DownloadMealImageTask;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.service.MealService;
-
+import gr.academic.city.sdmd.foodnetwork.ui.fragment.MealDetailsFragment;
 
 /**
  * Created by trumpets on 4/13/16.
  */
-public class MealDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MealDetailsActivity extends ToolBarActivity implements MealDetailsFragment.OnFragmentInteractionListener {
 
     private static final String EXTRA_MEAL_ID = "meal_id";
 
-    private static final int MEAL_LOADER = 20;
+    private long mealId;
+
+    private static final String LOG_TAG = "MealDetailsActivity ";
 
     public static Intent getStartIntent(Context context, long mealId) {
         Intent intent = new Intent(context, MealDetailsActivity.class);
@@ -40,114 +51,45 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         return intent;
     }
 
-    private long mealId;
-
-    private TextView tvTitle;
-    private TextView tvRecipe;
-    private TextView tvNumberOfServings;
-    private TextView tvPrepTime;
-    private TextView tvCreationDate;
-    private TextView tvUpvotes;
-    private long mealServerId = 0;
-    private int upvotes = 0;
-    private Cursor cursor;
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_meal_details);
-
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
 
-        tvTitle = (TextView) findViewById(R.id.tv_meal_title);
-        tvRecipe = (TextView) findViewById(R.id.tv_meal_recipe);
-        tvNumberOfServings = (TextView) findViewById(R.id.tv_number_of_servings);
-        tvPrepTime = (TextView) findViewById(R.id.tv_prep_time);
-        tvCreationDate = (TextView) findViewById(R.id.tv_meal_creation_date);
-        tvUpvotes = (TextView) findViewById(R.id.tv_upvotes);
-        getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
-        findViewById(R.id.btn_upvote_meal).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                cursor = getContentResolver().query(FoodNetworkContract.Meal.CONTENT_URI,
-                        new String[0],
-                        FoodNetworkContract.Meal._ID + " = " + mealId,
-                        null,
-                        null);
+        if (findViewById(R.id.fragment_container_meal) != null) {
 
-                if (cursor.moveToFirst()) {
-                    mealServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID));
-                    upvotes = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
-                }
-                MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, 1);
-                getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
-                getSupportLoaderManager().getLoader(MEAL_LOADER).forceLoad();
-                Snackbar.make(findViewById(R.id.coordinator_layout),
-                        R.string.msg_snackbar, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, -1);
-                        getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
-                        getSupportLoaderManager().getLoader(MEAL_LOADER).forceLoad();
-                    }
-                }).show();
+            if (savedInstanceState != null) {
+                return;
             }
-        });
 
-    }
+            MealDetailsFragment firstFragment = MealDetailsFragment.newInstance(mealId);
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case MEAL_LOADER:
-                return new CursorLoader(this,
-                        ContentUris.withAppendedId(FoodNetworkContract.Meal.CONTENT_URI, mealId),
-                        null, // NULL because we want every column
-                        null,
-                        null,
-                        null
-                );
-
-            default:
-                return null;
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_meal, firstFragment).commit();
         }
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        updateView(data);
+    protected void onResume() {
+        super.onResume();
+        Cursor c = getContentResolver().query(FoodNetworkContract.Meal.CONTENT_URI, new String[0], FoodNetworkContract.Meal._ID + " = " + mealId, null, null);
+        while (c.moveToNext()) {
+            getSupportActionBar().setTitle(c.getString(c.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE)));
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        updateView(null);
+    protected int getContentView() {
+        return R.layout.activity_meal_details;
     }
 
-    private void updateView(Cursor cursor) {
-        if (cursor != null && cursor.moveToFirst()) {
-            tvTitle.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_TITLE)));
-            tvRecipe.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_RECIPE)));
-            tvNumberOfServings.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS))));
+    @Override
+    protected int getTitleResource() {
+        return R.string.meal_details_title;
+    }
 
-            int prepTimeHour = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR));
-            int prepTimeMinute = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE));
+    @Override
+    public void onFragmentInteraction(long mealId) {
 
-            tvPrepTime.setText(getString(R.string.prep_time_w_placeholder, prepTimeHour, prepTimeMinute));
-            tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(
-                    FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
-
-            tvUpvotes.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES)));
-
-            new DownloadMealImageTask((ImageView) findViewById(R.id.iv_meal_preview))
-                    .execute(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREVIEW)));
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
     }
 }

@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swipe_refresh">
+    tools:context="gr.academic.city.sdmd.foodnetwork.ui.activity.MainActivity">
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <include
-        layout="@layout/toolbar_layout"
+    <include layout="@layout/toolbar_layout"
         android:id="@+id/toolbar" />
 
-    <fragment
-        class="gr.academic.city.sdmd.foodnetwork.ui.fragments.MealListFragment"
-        android:id="@+id/f_meal_list"
-        android:layout_below="@+id/toolbar"
-        style="@style/MatchWidthMatchHeight"
-        tools:layout="@layout/fragment_meal_list"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:id="@+id/swipe_refresh">
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</RelativeLayout>

@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/toolbar_layout"
+        android:id="@+id/toolbar" />
+
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="150dp"
@@ -27,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/btn_ok"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -80,18 +83,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="0:00"/>
-
-
-            <include
-                layout="@layout/toolbar_layout"
-                android:id="@+id/toolbar" />
-
-            <fragment
-                class="gr.academic.city.sdmd.foodnetwork.ui.fragments.CreateMealFragment"
-                android:id="@+id/f_create_meal"
-                android:layout_below="@+id/toolbar"
-                style="@style/MatchWidthWrapHeight"
-                tools:layout="@layout/fragment_meal_create"/>
 
         </RelativeLayout>
 

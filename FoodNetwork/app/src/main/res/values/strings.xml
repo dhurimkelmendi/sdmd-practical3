@@ -16,4 +16,15 @@
     <string name="nothing_is_made_in_no_time">Nothing is made in no time! :)</string>
     <string name="create_meal">Create Meal</string>
     <string name="upvote_meal">Upvote Meal</string>
+    <string name="upvote_header">Upvotes</string>
+    <string name="upvote">Upvote</string>
+
+    <string name="main_activity_title">Meal Types</string>
+    <string name="meal_details_title">Meal Details</string>
+    <string name="meals_title">Meals</string>
+    <string name="create_meal_title">Create new meal</string>
+    <string name="msg_snackbar">Meal upvoted!</string>
+    <string name="undo">Undo</string>
+
+
 </resources>
