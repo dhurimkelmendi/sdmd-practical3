@@ -24,18 +24,18 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
-        tools:text="0:20"/>
-
-    <TextView
-        android:id="@+id/tv_meal_upvotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         tools:text="0:20"/>
+
+    <include layout="@layout/layoute_toolbar"
+        android:id="@+id/toolbar" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"/>
+
 </RelativeLayout>

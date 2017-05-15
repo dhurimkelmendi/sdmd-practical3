@@ -4,15 +4,12 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.util.Log;
 
 import java.text.MessageFormat;
 
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 import gr.academic.city.sdmd.foodnetwork.domain.Meal;
 import gr.academic.city.sdmd.foodnetwork.receiver.TriggerPushToServerBroadcastReceiver;
-import gr.academic.city.sdmd.foodnetwork.ui.activity.MealDetailsActivity;
 import gr.academic.city.sdmd.foodnetwork.util.Commons;
 import gr.academic.city.sdmd.foodnetwork.util.Constants;
 import gr.academic.city.sdmd.foodnetwork.util.GsonResponseCallback;
@@ -28,19 +25,11 @@ public class MealService extends IntentService {
     private static final String EXTRA_MEAL_TYPE_SERVER_ID = "meal_type_server_id";
 
     private static final String ACTION_CREATE_MEAL = "gr.academic.city.sdmd.foodnetwork.CREATE_MEAL";
-    private static final String ACTION_UPVOTE_MEAL = "gr.academic.city.sdmd.foodnetwork.UPVOTE_MEAL";
-
-    private static final String EXTRA_MEAL_SERVER_ID = "meal_id";
     private static final String EXTRA_TITLE = "title";
     private static final String EXTRA_RECIPE = "recipe";
     private static final String EXTRA_NUMBER_OF_SERVINGS = "number_of_servings";
     private static final String EXTRA_PREP_TIME_HOUR = "prep_time_hour";
     private static final String EXTRA_PREP_TIME_MINUTE = "prep_time_minute";
-    private static final String EXTRA_UPVOTES = "upvotes";
-    private static final String EXTRA_UPVOTE_COUNT = "upvote_count";
-
-    private static final String EXTRA_PREVIEW = "preview";
-    private static final String LOG_TAG = "MealService";
 
     public static void startFetchMeals(Context context, long mealTypeServerId) {
         Intent intent = new Intent(context, MealService.class);
@@ -50,9 +39,7 @@ public class MealService extends IntentService {
         context.startService(intent);
     }
 
-    public static void startCreateMeal(Context context, long mealTypeServerId, String title,
-                                       String recipe, int numberOfServings, int prepTimeHour,
-                                       int prepTimeMinute) {
+    public static void startCreateMeal(Context context, long mealTypeServerId, String title, String recipe, int numberOfServings, int prepTimeHour, int prepTimeMinute) {
         Intent intent = new Intent(context, MealService.class);
         intent.setAction(ACTION_CREATE_MEAL);
         intent.putExtra(EXTRA_MEAL_TYPE_SERVER_ID, mealTypeServerId);
@@ -61,15 +48,7 @@ public class MealService extends IntentService {
         intent.putExtra(EXTRA_NUMBER_OF_SERVINGS, numberOfServings);
         intent.putExtra(EXTRA_PREP_TIME_HOUR, prepTimeHour);
         intent.putExtra(EXTRA_PREP_TIME_MINUTE, prepTimeMinute);
-        intent.putExtra(EXTRA_UPVOTES, 0);
 
-        context.startService(intent);
-    }
-    public static void startUpvoteMeal(Context context, long mealServerId, int upvoteCount){
-        Intent intent = new Intent(context, MealService.class);
-        intent.setAction(ACTION_UPVOTE_MEAL);
-        intent.putExtra(EXTRA_MEAL_SERVER_ID, mealServerId);
-        intent.putExtra(EXTRA_UPVOTE_COUNT, upvoteCount);
         context.startService(intent);
     }
 
@@ -83,8 +62,6 @@ public class MealService extends IntentService {
             fetchMeals(intent);
         } else if (ACTION_CREATE_MEAL.equals(intent.getAction())) {
             createMeal(intent);
-        } else if(ACTION_UPVOTE_MEAL.equals(intent.getAction())){
-            upvoteMeal(intent, intent.getIntExtra(EXTRA_UPVOTE_COUNT, 1));
         } else {
             throw new UnsupportedOperationException("Action not supported: " + intent.getAction());
         }
@@ -124,10 +101,8 @@ public class MealService extends IntentService {
         int numberOfServings = intent.getIntExtra(EXTRA_NUMBER_OF_SERVINGS, -1);
         int prepTimeHour = intent.getIntExtra(EXTRA_PREP_TIME_HOUR, -1);
         int prepTimeMinute = intent.getIntExtra(EXTRA_PREP_TIME_MINUTE, -1);
-        int upvotes = intent.getIntExtra(EXTRA_UPVOTES, 0);
-        String preview = intent.getStringExtra(EXTRA_PREVIEW);
-        ContentValues contentValues = new Meal(title, recipe, numberOfServings,
-                prepTimeHour, prepTimeMinute, mealTypeServerId, preview, upvotes).toContentValues();
+
+        ContentValues contentValues = new Meal(title, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId).toContentValues();
         contentValues.put(FoodNetworkContract.Meal.COLUMN_UPLOADED_TO_SERVER, 0);
         contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, -1);
 
@@ -137,28 +112,5 @@ public class MealService extends IntentService {
         );
 
         sendBroadcast(new Intent(TriggerPushToServerBroadcastReceiver.ACTION_TRIGGER));
-    }
-    private void upvoteMeal(Intent intent, int numberOfUpvotes){
-        long mealServerId = intent.getLongExtra(EXTRA_MEAL_SERVER_ID, -1);
-        Cursor cursor = getContentResolver().query(
-                FoodNetworkContract.Meal.CONTENT_URI,
-                new String[0],
-                FoodNetworkContract.Meal.COLUMN_SERVER_ID + " = ?",
-                new String[]{String.valueOf(mealServerId)},
-                null);
-        ContentValues contentValues = new ContentValues();
-        while(cursor.moveToNext()){
-            int currentUpvoteCount = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
-            contentValues.put(FoodNetworkContract.Meal.COLUMN_UPVOTES, currentUpvoteCount + numberOfUpvotes);
-            getContentResolver().update(FoodNetworkContract.Meal.CONTENT_URI,
-                    contentValues, FoodNetworkContract.Meal.COLUMN_SERVER_ID + " = " + mealServerId, null);
-        }
-        Log.d(LOG_TAG, "Upvote count raised by " + numberOfUpvotes + " for meal with id: " + mealServerId);
-
-        Intent upvoteMealIntent = new Intent("meal.upvote.action");
-        upvoteMealIntent.putExtra(EXTRA_MEAL_SERVER_ID, mealServerId);
-        upvoteMealIntent.setAction(TriggerPushToServerBroadcastReceiver.ACTION_TRIGGER_UPVOTE);
-
-        sendBroadcast(upvoteMealIntent);
     }
 }

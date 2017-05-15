@@ -11,7 +11,9 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -32,23 +34,20 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
             FoodNetworkContract.Meal._ID,
             FoodNetworkContract.Meal.COLUMN_TITLE,
             FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE,
-            FoodNetworkContract.Meal.COLUMN_UPVOTES
+            FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE
     };
 
-    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_UPVOTES + " DESC";
+    private static final String SORT_ORDER = FoodNetworkContract.Meal.COLUMN_CREATED_AT + " DESC";
 
     private static final int MEALS_LOADER = 10;
 
     private final static String[] FROM_COLUMNS = {
             FoodNetworkContract.Meal.COLUMN_TITLE,
-            FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,
-            FoodNetworkContract.Meal.COLUMN_UPVOTES};
+            FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR,};
 
     private final static int[] TO_IDS = {
             R.id.tv_meal_title,
-            R.id.tv_meal_prep_time,
-            R.id.tv_meal_upvotes};
+            R.id.tv_meal_prep_time};
 
     public static Intent getStartIntent(Context context, long mealTypeServerId) {
         Intent intent = new Intent(context, MealsActivity.class);
@@ -66,6 +65,12 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meals);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getTitleResource());
 
         this.mealTypeServerId = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
 
@@ -116,11 +121,7 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
 
         MealService.startFetchMeals(this, mealTypeServerId);
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getSupportLoaderManager().initLoader(MEALS_LOADER, null, this);
-    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {

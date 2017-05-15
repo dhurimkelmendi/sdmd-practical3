@@ -26,6 +26,10 @@
             android:name=".ui.activity.MealsActivity"
             android:screenOrientation="portrait"/>
 
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="gr.academic.city.sdmd.foodnetwork.ui.activity.ToolbarActivity" />
+
         <activity
             android:name=".ui.activity.CreateMealActivity"
             android:screenOrientation="portrait"/>

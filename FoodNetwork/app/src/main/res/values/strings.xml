@@ -7,7 +7,6 @@
     <string name="recipe">Recipe</string>
     <string name="number_of_servings">Number of Servings</string>
     <string name="prep_time">Prep Time</string>
-    <string name="upvotes">Upvotes</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="msg_meal_uploaded">Meal uploaded to server successfully. Click to view.</string>
@@ -15,6 +14,4 @@
     <string name="prep_time_w_placeholder">%1$d:%2$d</string>
     <string name="required">Required</string>
     <string name="nothing_is_made_in_no_time">Nothing is made in no time! :)</string>
-    <string name="msg_snackbar">Meal upvoted!</string>
-    <string name="undo">Undo</string>
 </resources>

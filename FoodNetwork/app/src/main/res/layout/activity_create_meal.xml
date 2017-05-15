@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    
 
     <Button
         android:id="@+id/btn_cancel"
@@ -80,6 +81,16 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="0:00"/>
+
+            <include layout="@layout/layoute_toolbar"
+                android:id="@+id/toolbar" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_margin="10dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"/>
 
         </RelativeLayout>
 
