@@ -19,12 +19,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 
-public class AppVoteTest {
+public class UpVoteTest {
 
     public ActivityTestRule<MealDetailsActivity> activityTestRule = new ActivityTestRule<>(MealDetailsActivity.class);
 
     @Test
     public void upVote() {
-        onView((withId(R.id.btn_upvote_meal)).perf(click()));
+        onView(withId(R.id.btn_upvote_meal)).perform(click());
+
 
     } }

@@ -32,11 +32,11 @@ public class MealCreateTest {
 
     @Test
     public void addMeal() {
-        onView(withId(R.id.tv_meal_title)).perform(typeText("brokoli”),
+        onView(withId(R.id.tv_meal_title)).perform(typeText("broccoli"),
                 closeSoftKeyboard());
-        onView(withId(R.id.txt_recipe)).perform(typeText("brokoli,water”),
+        onView(withId(R.id.txt_recipe)).perform(typeText("broccoli,water"),
                 closeSoftKeyboard());
-        onView(withId(R.id.txt_number_of_servings)).perform(typeText("4”),
+        onView(withId(R.id.txt_number_of_servings)).perform(typeText("4"),
                 closeSoftKeyboard());
         onView(withId(R.id.btn_add_meal)).perform(click());
     }
