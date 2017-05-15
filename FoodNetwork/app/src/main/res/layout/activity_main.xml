@@ -11,4 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/toolbar" />
+
+    <fragment
+        class="gr.academic.city.sdmd.foodnetwork.ui.fragments.MealListFragment"
+        android:id="@+id/f_meal_list"
+        android:layout_below="@+id/toolbar"
+        style="@style/MatchWidthMatchHeight"
+        tools:layout="@layout/fragment_meal_list"/>
+
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -28,15 +29,24 @@ import static gr.academic.city.sdmd.foodnetwork.util.Commons.executeRequest;
  * Created by trumpets on 4/24/17.
  */
 public class PushToServerService extends IntentService {
+    public static final String LOG_TAG = "PushToServerService";
 
     private static final int NOTIFICATION_ID = 187;
 
     private static final String ACTION_PUSH_MEALS_TO_SERVER = "gr.academic.city.sdmd.foodnetwork.ACTION_PUSH_MEALS_TO_SERVER";
+    private static final String ACTION_PUSH_MEAL_UPVOTES_TO_SERVER = "gr.academic.city.sdmd.foodnetwork.ACTION_PUSH_MEAL_UPVOTES_TO_SERVER";
 
+    private static long mealServerId;
     public static void startPushMealsToServer(Context context) {
         Intent intent = new Intent(context, PushToServerService.class);
         intent.setAction(ACTION_PUSH_MEALS_TO_SERVER);
 
+        context.startService(intent);
+    }
+    public static void startUpvoteMealToServer(Context context, long mealId) {
+        mealServerId = mealId;
+        Intent intent = new Intent(context, PushToServerService.class);
+        intent.setAction(ACTION_PUSH_MEAL_UPVOTES_TO_SERVER);
         context.startService(intent);
     }
 
@@ -48,6 +58,9 @@ public class PushToServerService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (ACTION_PUSH_MEALS_TO_SERVER.equals(intent.getAction())) {
             pushActivitiesToServer();
+        }
+        else if (ACTION_PUSH_MEAL_UPVOTES_TO_SERVER.equals(intent.getAction())) {
+            pushUpvotesToServer();
         }
     }
 
@@ -66,10 +79,14 @@ public class PushToServerService extends IntentService {
             int numberOfServings = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS));
             int prepTimeHour = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR));
             int prepTimeMinute = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE));
+            String preview = cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREVIEW));
+            int upvotes = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
 
             long mealTypeServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_MEAL_TYPE_SERVER_ID));
 
-            executeRequest(MessageFormat.format(Constants.MEALS_URL, mealTypeServerId), Commons.ConnectionMethod.POST, new Gson().toJson(new Meal(title, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId)), new Commons.ResponseCallback() {
+            executeRequest(MessageFormat.format(Constants.MEALS_URL, mealTypeServerId), Commons.ConnectionMethod.POST, new Gson().toJson(
+                    new Meal(title, recipe, numberOfServings, prepTimeHour, prepTimeMinute, mealTypeServerId, preview, upvotes)),
+                    new Commons.ResponseCallback() {
                 @Override
                 public void onResponse(int responseCode, String responsePayload) {
                     // responsePayload is the new ID of this club activity on the server
@@ -84,6 +101,7 @@ public class PushToServerService extends IntentService {
                             null,
                             null
                     );
+                    Log.d(LOG_TAG, contentValues.toString());
 
                     showNotification(mealDbId);
                 }
@@ -91,6 +109,16 @@ public class PushToServerService extends IntentService {
         }
 
         cursor.close();
+    }
+    private void pushUpvotesToServer(){
+        executeRequest(MessageFormat.format(Constants.MEAL_UPVOTE_URL, mealServerId), Commons.ConnectionMethod.POST,
+                null, new Commons.ResponseCallback(){
+                    @Override
+                    public void onResponse(int responseCode, String responsePayLoad){
+                        Log.d(LOG_TAG, "Response from server: " + responseCode);
+                    }
+        });
+
     }
 
     private void showNotification(long mealDbId) {

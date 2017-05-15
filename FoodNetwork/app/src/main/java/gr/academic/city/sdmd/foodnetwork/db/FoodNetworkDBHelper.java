@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FoodNetworkDBHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "food_network.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -34,6 +34,8 @@ public class FoodNetworkDBHelper extends SQLiteOpenHelper {
                     FoodNetworkContract.Meal.COLUMN_NUMBER_OF_SERVINGS + INT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_PREP_TIME_HOUR + INT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE + INT_TYPE + COMMA_SEP +
+                    FoodNetworkContract.Meal.COLUMN_PREVIEW + TEXT_TYPE + COMMA_SEP +
+                    FoodNetworkContract.Meal.COLUMN_UPVOTES + INT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_CREATED_AT + INT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_UPLOADED_TO_SERVER + SHORT_TYPE + COMMA_SEP +
                     FoodNetworkContract.Meal.COLUMN_SERVER_ID + INT_TYPE + COMMA_SEP +

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="gr.academic.city.sdmd.foodnetwork"
           xmlns:android="http://schemas.android.com/apk/res/android">
+    <supports-screens android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -13,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
@@ -25,10 +31,6 @@
         <activity
             android:name=".ui.activity.MealsActivity"
             android:screenOrientation="portrait"/>
-
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="gr.academic.city.sdmd.foodnetwork.ui.activity.ToolbarActivity" />
 
         <activity
             android:name=".ui.activity.CreateMealActivity"

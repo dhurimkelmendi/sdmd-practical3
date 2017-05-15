@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
 
     <Button
         android:id="@+id/btn_cancel"
@@ -82,15 +81,17 @@
                 android:textStyle="bold"
                 tools:text="0:00"/>
 
-            <include layout="@layout/layoute_toolbar"
+
+            <include
+                layout="@layout/layout_toolbar"
                 android:id="@+id/toolbar" />
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:layout_margin="10dp"
-            android:layout_centerHorizontal="true"
-            android:textSize="20sp"/>
+
+            <fragment
+                class="gr.academic.city.sdmd.foodnetwork.ui.fragments.CreateMealFragment"
+                android:id="@+id/f_create_meal"
+                android:layout_below="@+id/toolbar"
+                style="@style/MatchWidthWrapHeight"
+                tools:layout="@layout/fragment_create_meal"/>
 
         </RelativeLayout>
 

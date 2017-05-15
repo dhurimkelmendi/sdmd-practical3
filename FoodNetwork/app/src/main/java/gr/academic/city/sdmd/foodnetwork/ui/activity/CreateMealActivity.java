@@ -4,9 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,12 +43,6 @@ public class CreateMealActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_meal);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getTitleResource());
 
         mealTypeServerId = getIntent().getLongExtra(EXTRA_MEAL_TYPE_SERVER_ID, -1);
 
@@ -117,6 +109,8 @@ public class CreateMealActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.nothing_is_made_in_no_time, Toast.LENGTH_SHORT).show();
             return;
         }
+
+
 
         MealService.startCreateMeal(this,
                 mealTypeServerId,

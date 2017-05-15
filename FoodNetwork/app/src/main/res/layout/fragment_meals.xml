@@ -27,15 +27,4 @@
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:text="@string/add_meal"/>
-
-    <include
-        layout="@layout/layout_toolbar"
-        android:id="@+id/toolbar"/>
-
-    <fragment
-        android:id="@+id/f_meals"
-        android:layout_below="@+id/toolbar"
-        class="gr.academic.city.sdmd.foodnetwork.ui.fragments.MealsFragment"
-        style="@style/MatchWidthWrapHeight"
-        tools:layout="@layout/fragment_meals"/>
 </RelativeLayout>
