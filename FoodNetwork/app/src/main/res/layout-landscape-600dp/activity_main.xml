@@ -2,17 +2,12 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/swipe_refresh">
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    style="@style/MatchWidthMatchHeight"
+    android:id="@+id/swipe_refresh"
+    tools:context="gr.academic.city.sdmd.foodnetwork.ui.activity.MainActivity">
 
     <include
-        layout="@layout/toolbar_layout"
+        layout="@layout/layout_toolbar"
         android:id="@+id/toolbar" />
 
     <fragment

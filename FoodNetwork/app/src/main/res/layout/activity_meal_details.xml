@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_prep_time"
                 android:layout_marginTop="10dp"
-                android:text="@string/upvotes"/>
+                android:text="@string/upvote_meal"/>
 
             <TextView
                 android:id="@+id/tv_upvotes"
@@ -134,7 +134,7 @@
                 android:layout_alignParentEnd="true" />
 
             <include
-                layout="@layout/layout_toolbar"
+                layout="@layout/toolbar_layout"
                 android:id="@+id/toolbar"/>
 
             <fragment

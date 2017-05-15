@@ -83,7 +83,7 @@
 
 
             <include
-                layout="@layout/layout_toolbar"
+                layout="@layout/toolbar_layout"
                 android:id="@+id/toolbar" />
 
             <fragment
@@ -91,7 +91,7 @@
                 android:id="@+id/f_create_meal"
                 android:layout_below="@+id/toolbar"
                 style="@style/MatchWidthWrapHeight"
-                tools:layout="@layout/fragment_create_meal"/>
+                tools:layout="@layout/fragment_meal_create"/>
 
         </RelativeLayout>
 

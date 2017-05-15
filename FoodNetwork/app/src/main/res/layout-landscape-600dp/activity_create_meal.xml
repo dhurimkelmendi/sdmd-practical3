@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    style="@style/MatchWidthMatchHeight"
+    tools:context="gr.academic.city.sdmd.foodnetwork.ui.activity.CreateMealActivity">
+
+    <include
+        layout="@layout/layout_toolbar"
+        android:id="@+id/toolbar" />
+
+    <fragment
+        class="gr.academic.city.sdmd.foodnetwork.ui.fragments.CreateMealFragment"
+        android:id="@+id/f_create_meal"
+        android:layout_below="@+id/toolbar"
+        style="@style/MatchWidthWrapHeight"
+        tools:layout="@layout/fragment_create_meal"/>
+
+</RelativeLayout>
