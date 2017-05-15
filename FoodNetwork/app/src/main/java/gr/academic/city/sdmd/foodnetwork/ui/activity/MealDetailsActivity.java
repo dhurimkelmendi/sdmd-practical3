@@ -81,16 +81,17 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
                     upvotes = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
                 }
                 MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, 1);
-                updateView(cursor);
+                getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
+                getSupportLoaderManager().getLoader(MEAL_LOADER).forceLoad();
                 Snackbar.make(findViewById(R.id.coordinator_layout),
                         R.string.msg_snackbar, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, -1);
                         getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
+                        getSupportLoaderManager().getLoader(MEAL_LOADER).forceLoad();
                     }
                 }).show();
-                getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
             }
         });
 
