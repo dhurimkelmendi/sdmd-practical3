@@ -3,11 +3,13 @@
     <!--TODO(1) (back arrow) and move the actions there (create meal, upvote meal).-->
     <!--TODO(1) Use the app bar title to properly convey to the user where in the app they are-->
 
-    <!--TODO(2) The meal details screen should additionally show the image for the meal and the number of upvotes that meal has-->
+    <!--COMPLETED(2) The meal details screen should additionally show the image for the meal and the number of upvotes that meal has-->
 
     <!--COMPLETED(3) The meal list item entry should additionally show the number of upvotes that meal has-->
 
     <!--COMPLETED(4) The meal list should be sorted by number of upvotes in a descending order-->
+
+    <!--COMPLETED(5) The meal details screen should support the option to upvote the meal-->
 
     <!--COMPLETED(5) The meal details screen should support the option to upvote the meal-->
 
@@ -19,7 +21,7 @@
 
     <!--COMPLETED(9) The server communication operations should be executed in the background for a seamless user experience-->
 
-    <!--TODO(10) The meal list item and the meal details views should update the upvote count after a user upvotes-->
-    <!--TODO(10) a meal without the need for them to refresh it-->
+    <!--COMPLETED(10) The meal list item and the meal details views should update the upvote count after a user upvotes-->
+    <!--COMPLETED(10) a meal without the need for them to refresh it-->
 
     <!--COMPLETED(11) The meal types and meals (all the data the app operates on) will need to be stored locally.-->
