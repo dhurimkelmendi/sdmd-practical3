@@ -23,6 +23,7 @@
     <string name="meal_details_title">Meal Details</string>
     <string name="meals_title">Meals</string>
     <string name="create_meal_title">Create new meal</string>
+    <string name="err_no_internet">"No internet connection!"</string>
     <string name="msg_snackbar">Meal upvoted!</string>
     <string name="undo">Undo</string>
 

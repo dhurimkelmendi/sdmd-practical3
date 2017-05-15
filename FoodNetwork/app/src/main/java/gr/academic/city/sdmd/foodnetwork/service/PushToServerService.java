@@ -90,10 +90,12 @@ public class PushToServerService extends IntentService {
                 @Override
                 public void onResponse(int responseCode, String responsePayload) {
                     // responsePayload is the new ID of this club activity on the server
-
+                    Meal meal = new Gson().fromJson(responsePayload, Meal.class);
+                    Log.d(LOG_TAG, meal.getImagePreview());
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(FoodNetworkContract.Meal.COLUMN_UPLOADED_TO_SERVER, 1);
-                    contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, responsePayload);
+                    contentValues.put(FoodNetworkContract.Meal.COLUMN_SERVER_ID, meal.getServerId());
+                    contentValues.put(FoodNetworkContract.Meal.COLUMN_PREVIEW, meal.getImagePreview());
 
                     getContentResolver().update(
                             ContentUris.withAppendedId(FoodNetworkContract.Meal.CONTENT_URI, mealDbId),
