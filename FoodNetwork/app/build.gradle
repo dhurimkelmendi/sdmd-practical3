@@ -28,4 +28,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     compile "com.google.code.gson:gson:${GSON_VERSION}"
+    compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
 }
