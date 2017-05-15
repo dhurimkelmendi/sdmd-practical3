@@ -116,7 +116,11 @@ public class MealsActivity extends AppCompatActivity implements LoaderManager.Lo
 
         MealService.startFetchMeals(this, mealTypeServerId);
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportLoaderManager().initLoader(MEALS_LOADER, null, this);
+    }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
