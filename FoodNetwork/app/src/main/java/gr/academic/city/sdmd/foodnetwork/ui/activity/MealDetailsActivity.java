@@ -126,6 +126,8 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         }
     }
     private void startImageDownload(String imageUrl) {
+        if(imageUrl == null)
+            Toast.makeText(MealDetailsActivity.this, "No image for this meal!", Toast.LENGTH_LONG).show();
         Log.e(LOG_TAG, imageUrl);
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -164,31 +166,47 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-    private Bitmap downloadImage(String imageUrl) throws IOException {
+    public static Bitmap downloadImage(String imageUrl) throws IOException {
         InputStream is = null;
 
         try {
             URL url = new URL(imageUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setInstanceFollowRedirects(true);
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
-
-            // Starts the query
             conn.connect();
 
+            boolean redirect = false;
             int response = conn.getResponseCode();
-            Log.d(LOG_TAG, "The response is: " + response);
+            if (response != HttpURLConnection.HTTP_OK) {
+                if (response == HttpURLConnection.HTTP_MOVED_TEMP
+                        || response == HttpURLConnection.HTTP_MOVED_PERM
+                        || response == HttpURLConnection.HTTP_SEE_OTHER)
+                    redirect = true;
+            }
+
+            if (redirect) {
+                // get redirect url from "location" header field
+                String newUrl = conn.getHeaderField("Location");
+
+                // open the new connnection again
+                conn = (HttpURLConnection) new URL(newUrl).openConnection();
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.connect();
+            }
+
+            response = conn.getResponseCode();
             is = conn.getInputStream();
 
-            // Convert the InputStream into a bitmap
             Bitmap bitmap = BitmapFactory.decodeStream(is);
-
             return bitmap;
 
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
         } finally {
             if (is != null) {
                 is.close();
