@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -46,6 +47,8 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
     private TextView tvCreationDate;
     private TextView tvUpvotes;
     private long mealServerId = 0;
+    private int upvotes = 0;
+    private Cursor cursor;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -63,29 +66,34 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         tvPrepTime = (TextView) findViewById(R.id.tv_prep_time);
         tvCreationDate = (TextView) findViewById(R.id.tv_meal_creation_date);
         tvUpvotes = (TextView) findViewById(R.id.tv_upvotes);
+        getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
         findViewById(R.id.btn_upvote_meal).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-            Cursor cursor = getContentResolver().query(FoodNetworkContract.Meal.CONTENT_URI,
-                    new String[0],
-                    FoodNetworkContract.Meal._ID + " = " + mealId,
-                    null,
-                    null);
+                cursor = getContentResolver().query(FoodNetworkContract.Meal.CONTENT_URI,
+                        new String[0],
+                        FoodNetworkContract.Meal._ID + " = " + mealId,
+                        null,
+                        null);
 
-            if (cursor.moveToFirst()) {
-                mealServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID));
-            }
+                if (cursor.moveToFirst()) {
+                    mealServerId = cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_SERVER_ID));
+                    upvotes = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
+                }
                 MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, 1);
+                updateView(cursor);
                 Snackbar.make(findViewById(R.id.coordinator_layout),
                         R.string.msg_snackbar, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         MealService.startUpvoteMeal(MealDetailsActivity.this, mealServerId, -1);
+                        getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
                     }
                 }).show();
+                getSupportLoaderManager().restartLoader(MEAL_LOADER, null, MealDetailsActivity.this);
             }
         });
-        getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
+
     }
 
     @Override

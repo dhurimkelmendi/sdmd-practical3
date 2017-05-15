@@ -138,7 +138,7 @@ public class MealService extends IntentService {
 
         sendBroadcast(new Intent(TriggerPushToServerBroadcastReceiver.ACTION_TRIGGER));
     }
-    private void upvoteMeal(Intent intent, int upvoteCount){
+    private void upvoteMeal(Intent intent, int numberOfUpvotes){
         long mealServerId = intent.getLongExtra(EXTRA_MEAL_SERVER_ID, -1);
         Cursor cursor = getContentResolver().query(
                 FoodNetworkContract.Meal.CONTENT_URI,
@@ -149,11 +149,11 @@ public class MealService extends IntentService {
         ContentValues contentValues = new ContentValues();
         while(cursor.moveToNext()){
             int currentUpvoteCount = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES));
-            contentValues.put(FoodNetworkContract.Meal.COLUMN_UPVOTES, currentUpvoteCount + upvoteCount);
+            contentValues.put(FoodNetworkContract.Meal.COLUMN_UPVOTES, currentUpvoteCount + numberOfUpvotes);
             getContentResolver().update(FoodNetworkContract.Meal.CONTENT_URI,
                     contentValues, FoodNetworkContract.Meal.COLUMN_SERVER_ID + " = " + mealServerId, null);
         }
-        Log.d(LOG_TAG, "Upvote count raised by " + upvoteCount + " for meal with id: " + mealServerId);
+        Log.d(LOG_TAG, "Upvote count raised by " + numberOfUpvotes + " for meal with id: " + mealServerId);
 
         Intent upvoteMealIntent = new Intent("meal.upvote.action");
         upvoteMealIntent.putExtra(EXTRA_MEAL_SERVER_ID, mealServerId);

@@ -9,17 +9,17 @@
 
     <!--COMPLETED(4) The meal list should be sorted by number of upvotes in a descending order-->
 
-    <!--TODO(5) The meal details screen should support the option to upvote the meal-->
+    <!--COMPLETED(5) The meal details screen should support the option to upvote the meal-->
 
-    <!--TODO(6) Present the user with an option to Undo the upvote action-->
+    <!--COMPLETED(6) Present the user with an option to Undo the upvote action-->
 
     <!--TODO(7) Support tablets by creating a special landscape tablet master / detail view-->
 
     <!--TODO(8) Write three (3) integration tests for the app-->
 
-    <!--TODO(9) The server communication operations should be executed in the background for a seamless user experience-->
+    <!--COMPLETED(9) The server communication operations should be executed in the background for a seamless user experience-->
 
     <!--TODO(10) The meal list item and the meal details views should update the upvote count after a user upvotes-->
     <!--TODO(10) a meal without the need for them to refresh it-->
 
-    <!--TODO(11) The meal types and meals (all the data the app operates on) will need to be stored locally.-->
+    <!--COMPLETED(11) The meal types and meals (all the data the app operates on) will need to be stored locally.-->

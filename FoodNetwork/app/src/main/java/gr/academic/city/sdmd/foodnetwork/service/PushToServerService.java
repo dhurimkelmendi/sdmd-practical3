@@ -101,6 +101,7 @@ public class PushToServerService extends IntentService {
                             null,
                             null
                     );
+                    Log.d(LOG_TAG, contentValues.toString());
 
                     showNotification(mealDbId);
                 }
