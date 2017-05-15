@@ -110,6 +110,8 @@ public class CreateMealActivity extends AppCompatActivity {
             return;
         }
 
+
+
         MealService.startCreateMeal(this,
                 mealTypeServerId,
                 title,

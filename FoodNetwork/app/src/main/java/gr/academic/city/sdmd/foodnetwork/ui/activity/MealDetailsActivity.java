@@ -9,12 +9,14 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import gr.academic.city.sdmd.foodnetwork.R;
+import gr.academic.city.sdmd.foodnetwork.async_tasks.DownloadMealImageTask;
 import gr.academic.city.sdmd.foodnetwork.db.FoodNetworkContract;
 
 
@@ -41,6 +43,7 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
     private TextView tvNumberOfServings;
     private TextView tvPrepTime;
     private TextView tvCreationDate;
+    private TextView tvUpvotes;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -50,6 +53,7 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
 
         setContentView(R.layout.activity_meal_details);
 
+
         mealId = getIntent().getLongExtra(EXTRA_MEAL_ID, -1);
 
         tvTitle = (TextView) findViewById(R.id.tv_meal_title);
@@ -57,6 +61,7 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
         tvNumberOfServings = (TextView) findViewById(R.id.tv_number_of_servings);
         tvPrepTime = (TextView) findViewById(R.id.tv_prep_time);
         tvCreationDate = (TextView) findViewById(R.id.tv_meal_creation_date);
+        tvUpvotes = (TextView) findViewById(R.id.tv_upvotes);
 
         getSupportLoaderManager().initLoader(MEAL_LOADER, null, this);
     }
@@ -98,7 +103,13 @@ public class MealDetailsActivity extends AppCompatActivity implements LoaderMana
             int prepTimeMinute = cursor.getInt(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREP_TIME_MINUTE));
 
             tvPrepTime.setText(getString(R.string.prep_time_w_placeholder, prepTimeHour, prepTimeMinute));
-            tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
+            tvCreationDate.setText(dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(
+                    FoodNetworkContract.Meal.COLUMN_CREATED_AT)))));
+
+            tvUpvotes.setText(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_UPVOTES)));
+
+            new DownloadMealImageTask((ImageView) findViewById(R.id.iv_meal_preview))
+                    .execute(cursor.getString(cursor.getColumnIndexOrThrow(FoodNetworkContract.Meal.COLUMN_PREVIEW)));
         }
 
         if (cursor != null) {

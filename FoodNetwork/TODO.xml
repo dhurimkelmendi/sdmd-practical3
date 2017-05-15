@@ -5,9 +5,10 @@
 
     <!--TODO(2) The meal details screen should additionally show the image for the meal and the number of upvotes that meal has-->
 
-    <!--TODO(3) The meal list item entry should additionally show the number of upvotes that meal has-->
+    <!--COMPLETED(3) The meal list item entry should additionally show the number of upvotes that meal has-->
 
-    <!--TODO(4) The meal list should be sorted by number of upvotes in a descending order-->
+    <!--COMPLETED(4) The meal list should be sorted by number of upvotes in a descending order-->
+
 
     <!--TODO(5) The meal details screen should support the option to upvote the meal-->
 
